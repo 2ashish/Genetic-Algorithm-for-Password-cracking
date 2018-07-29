@@ -17,7 +17,7 @@ def fitness(password,test_word):
 def new_word(length):
 	word = ""
 	for i in range(length):
-		word+=(random.choice(string.ascii_lowercase))
+		word+=(random.choice(string.ascii_letters + string.digits))					# if change here then change in mutate also
 	return word
 
 def get_first_gen(pop_size,length):
@@ -67,7 +67,7 @@ def mutate(pop,chance):
 			word = ""
 			if(k!=0):
 				word+=pop[i][:k]
-			word+=random.choice(string.ascii_lowercase)+ pop[i][k+1:]
+			word+=random.choice(string.ascii_letters + string.digits)+ pop[i][k+1:]
 			pop[i]=word
 	return pop
 
@@ -84,10 +84,11 @@ max_gen = int(sys.argv[6])			# max number of generation to simulate
 # print(new_word(20))
 
 pop = get_first_gen(pop_size,len(password))
-print(max_gen)
+
 for i  in range(max_gen):
 	pop_sort = pop_fitness(pop,password)
-	print(i,pop_sort[0][1],pop_sort[0][0],len(pop_sort))
+	# if(i%10==9):
+	# 	print(i,pop_sort[0][1],pop_sort[0][0],len(pop_sort))
 	if(pop_sort[0][1]==100.0):
 		break
 	next_parents = select_pop(pop_sort,best_candidates,lucky_candidates,pop_size)
@@ -95,4 +96,4 @@ for i  in range(max_gen):
 	next_pop = mutate(next_pop,mutation_percent)
 	pop = next_pop
 
-print(pop_sort[0][0])
+print("password is:",pop_sort[0][0],"generation:",i,"number of attempts:",i*pop_size)
