@@ -2,7 +2,7 @@ import sys
 import random
 import string
 
-def fitness(password,test_word):
+def fitness(password,test_word):									# fitness function
 	score=0
 	if (len(password)!=len(test_word)):
 		print("length do not match")
@@ -20,7 +20,7 @@ def new_word(length):
 		word+=(random.choice(string.ascii_letters + string.digits))					# if change here then change in mutate also
 	return word
 
-def get_first_gen(pop_size,length):
+def get_first_gen(pop_size,length):									# first generation
 	pop = []
 	for i in range(pop_size):
 		pop.append(new_word(length))
@@ -32,7 +32,7 @@ def pop_fitness(pop,password):
 		pop_fit[i] = fitness(password,i)
 	return sorted(pop_fit.items(), key = lambda t: t[1], reverse = True)
 
-def select_pop(pop_sort,best ,lucky,pop_size):
+def select_pop(pop_sort,best ,lucky,pop_size):						# select best and lucky candidate whose genes will pass to next generation
 	next_gen = []
 	for i in range(best):
 		if(i>=len(pop_sort)):
@@ -60,7 +60,7 @@ def create_children(parents):
 			next_pop.append(create_child(parents[i],parents[len(parents)-1-i]))
 	return next_pop
 
-def mutate(pop,chance):
+def mutate(pop,chance):											# give mutations to some of the candidates
 	for i in range(len(pop)):
 		if(random.random()*100<chance):
 			k = random.randint(0,len(pop[0])-1)
@@ -87,8 +87,8 @@ pop = get_first_gen(pop_size,len(password))
 
 for i  in range(max_gen):
 	pop_sort = pop_fitness(pop,password)
-	# if(i%10==9):
-	# 	print(i,pop_sort[0][1],pop_sort[0][0],len(pop_sort))
+	if(i%5==4):															# print after 5 generations
+		print(i,pop_sort[0][1],pop_sort[0][0],len(pop_sort))
 	if(pop_sort[0][1]==100.0):
 		break
 	next_parents = select_pop(pop_sort,best_candidates,lucky_candidates,pop_size)
